@@ -1,9 +1,18 @@
 #!/bin/bash
 
+GIT_REPO=https://github.com/GavinNL/cppnew
+GIT_LOCAL_REPO=$HOME/.cache/cppnew
+
 TEMPLATE_LOCATION=$HOME/Projects/cppnew/templates
 
 TEMPLATE=$1
 DIR_NAME=$2
+
+if [ ! -d ${GIT_LOCAL_REPO} ]; then
+    echo "Cloning all templates to: ${GIT_LOCAL_REPO}"
+    git clone ${GIT_REPO} ${GIT_LOCAL_REPO}
+fi
+
 
 function list_templates() {
 
@@ -23,21 +32,22 @@ function new_proj() {
 
 function template_exists()
 {
-    if [[ -f ${TEMPLATE_LOCATION}/$1/DESCRIPTION ]]; then 
+    if [[ -f ${TEMPLATE_LOCATION}/$1/DESCRIPTION ]]; then
         return 0
     fi
     return 1
 }
 
 if [[ "$TEMPLATE" == "" || "$DIR_NAME" == "" ]]; then
-echo ""
-echo "Templates:"
-echo ""
-list_templates
-exit 1
+    echo ""
+    echo "Templates:"
+    echo ""
+    list_templates
+    echo ""
+    exit 1
 fi
 
-if [ -e ${PWD}/${DIR_NAME} ]; then 
+if [ -e ${PWD}/${DIR_NAME} ]; then
     echo ${PWD}/${DIR_NAME} exists. Cannot create template
     exit 1
 fi
@@ -45,7 +55,7 @@ fi
 
 if [[ "$TEMPLATE" == "" || "$DIR_NAME" == "" ]]; then
 
-list_templates
+    list_templates
 
 else
 
@@ -58,8 +68,6 @@ else
         cp  -r ${TEMPLATE_LOCATION}/$1 ${DIR_NAME}
         rm  ${TEMPLATE_LOCATION}/$1/DESCRIPTION
 
-    fi    
+    fi
 
 fi
-
-
