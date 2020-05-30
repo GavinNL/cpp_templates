@@ -66,7 +66,7 @@ else
     else
 
         cp  -r ${TEMPLATE_LOCATION}/$1 ${DIR_NAME}
-        rm  ${TEMPLATE_LOCATION}/$1/DESCRIPTION
+        rm  ${DIR_NAME}/DESCRIPTION
 
     fi
 
