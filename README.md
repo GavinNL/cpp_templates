@@ -7,10 +7,11 @@ A simple shell script to quickly build a folder for C++ projects
 Download a copy of the shell script to your Home directory's bin folder.
 
 ```Bash
-wget https://github.com/GavinNL/cppnew/raw/master/cppnew -o  ${HOME}/.local/bin/cppnew
-chmod +x $HOME/.local/bin/cppnew
-
+cd $HOME/.local/bin
+wget https://raw.githubusercontent.com/GavinNL/cppnew/master/cppnew
+chmod +x cppnew
 ```
+
 When you first run `cppnew` it will clone all the templates to your
 `$HOME/.cache/cppnew` folder.
 
