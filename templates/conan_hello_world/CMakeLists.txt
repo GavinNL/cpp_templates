@@ -21,7 +21,7 @@ endif()
 set(outName              ${PROJECT_NAME})   # name of the library
 set(srcFiles             "main.cpp"     )          # all the source files for this library
 set(PublicLinkedTargets  ""             )
-#set(PrivateLinkedTargets  CONAN_PKG::fmt   )
+set(PrivateLinkedTargets  CONAN_PKG::spdlog   )
 #-------------------------------------------------------------------------------
 file(GLOB_RECURSE srcFiles ${srcFiles} )
 add_executable( ${outName} ${srcFiles} )
