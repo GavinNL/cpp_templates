@@ -46,7 +46,6 @@ function update() {
     git fetch
     git pull
 
-    cat $GIT_LOCAL_REPO/cppnew > $SOURCE
     popd
 
     exit 0
