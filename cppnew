@@ -38,8 +38,6 @@ function update() {
     done
     DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
-    echo "LOCATION: " $SOURCE
-
 
     pushd $GIT_LOCAL_REPO
 
