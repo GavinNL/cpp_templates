@@ -8,11 +8,15 @@ TEMPLATE_LOCATION=$HOME/Projects/cppnew/templates
 TEMPLATE=$1
 DIR_NAME=$2
 
-if [ ! -d ${GIT_LOCAL_REPO} ]; then
-    echo "Cloning all templates to: ${GIT_LOCAL_REPO}"
-    git clone ${GIT_REPO} ${GIT_LOCAL_REPO}
-fi
 
+
+function cloneRepo() {
+    #statements
+    if [ ! -d ${GIT_LOCAL_REPO} ]; then
+        echo "Cloning all templates to: ${GIT_LOCAL_REPO}"
+        git clone ${GIT_REPO} ${GIT_LOCAL_REPO}
+    fi
+}
 
 function list_templates() {
 
@@ -25,9 +29,28 @@ done
 
 }
 
+# Updates the repo and the shell script if needed
+function update() {
+    SOURCE="${BASH_SOURCE[0]}"
+    while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+      DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+      SOURCE="$(readlink "$SOURCE")"
+      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+    done
+    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
-function new_proj() {
-   template=$1
+    echo "LOCATION: " $SOURCE
+
+
+    pushd $GIT_LOCAL_REPO
+
+    git fetch
+    git pull
+
+    cat $GIT_LOCAL_REPO/cppnew > $SOURCE
+    popd
+
+    exit 0
 }
 
 function template_exists()
@@ -37,6 +60,15 @@ function template_exists()
     fi
     return 1
 }
+
+
+# clone the repo if it doesn't exist already
+cloneRepo
+
+if [[ "$TEMPLATE" == "update" || "$DIR_NAME" == "" ]]; then
+    update
+fi
+
 
 if [[ "$TEMPLATE" == "" || "$DIR_NAME" == "" ]]; then
     echo ""
