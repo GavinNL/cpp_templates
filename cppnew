@@ -10,20 +10,19 @@ DIR_NAME=$2
 
 
 
-function cloneRepo() {
-    #statements
-    if [ ! -d ${GIT_LOCAL_REPO} ]; then
-        echo "Cloning all templates to: ${GIT_LOCAL_REPO}"
-        git clone ${GIT_REPO} ${GIT_LOCAL_REPO}
-    fi
-}
+#statements
+if [ ! -d ${GIT_LOCAL_REPO} ]; then
+    echo "Cloning all templates to: ${GIT_LOCAL_REPO}"
+    git clone ${GIT_REPO} ${GIT_LOCAL_REPO}
+fi
+
 
 function list_templates() {
 
 for f in ${TEMPLATE_LOCATION}/*; do
     if [ -f ${f}/DESCRIPTION ]; then
         # Will not run if no directories are available
-        echo "   " $(basename ${f} suffix)  -  $(cat ${f}/DESCRIPTION)
+        echo -e "   " $(basename ${f} suffix) '|'- $(cat ${f}/DESCRIPTION)
     fi
 done
 
@@ -62,19 +61,30 @@ function template_exists()
 }
 
 
-# clone the repo if it doesn't exist already
-cloneRepo
-
-if [[ "$TEMPLATE" == "update" || "$DIR_NAME" == "" ]]; then
+if [[ "$TEMPLATE" == "update" ]]; then
     update
 fi
 
 
+
 if [[ "$TEMPLATE" == "" || "$DIR_NAME" == "" ]]; then
+    echo "Quickly create a C++ project template. Most of the templates use "
+    echo "the conan package manager for handling dependencies"
+    echo ""
+    echo "Usage"
+    echo ""
+    echo "   cppnew TEMPLATE_NAME  project_folder"
+    echo ""
+    echo "Example: "
+    echo ""
+    echo "    cppnew REST_restinio myRestServer"
+    echo "    mkdir -p myRestServer/build && cd myRestServer/build"
+    echo "    conan install .. -s compiler.libcxx=libstdc++11"
+    echo "    cmake .. && cmake --build ."
     echo ""
     echo "Templates:"
     echo ""
-    list_templates
+    list_templates  | column -t -s '|'
     echo ""
     exit 1
 fi
