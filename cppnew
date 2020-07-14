@@ -46,7 +46,6 @@ function update() {
 
     popd
 
-    cat $GIT_LOCAL_REPO/cppnew > $SOURCE
     exit 0
 }
 
