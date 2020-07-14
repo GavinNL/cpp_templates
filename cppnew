@@ -107,6 +107,7 @@ else
         cp  -r ${TEMPLATE_LOCATION}/$1 ${DIR_NAME}
         rm  ${DIR_NAME}/DESCRIPTION
 
+        ( echo "cat <<EOF" ; cat ${DIR_NAME}/BUILD ; echo EOF ) | SRC_DIR=${DIR_NAME} sh
     fi
 
 fi
