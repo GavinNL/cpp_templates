@@ -1,0 +1,11 @@
+[requires]
+wxwidgets/3.1.2@bincrafters/stable
+
+[options]
+wxwidgets:webview=False
+
+[generators]
+cmake
+cmake_paths
+cmake_find_package
+
