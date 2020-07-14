@@ -33,7 +33,9 @@ Templates:
 
 To create a project:
 
+>
 > cppnew [template name] [project folder]
+>
 
 `[project folder]` must not already exist.
 
@@ -43,6 +45,23 @@ cppnew hello_world MyHelloWorldProject
 
 cd MyHelloWorldProject
 mkdir build  && cd build
+cmake ..
+cmake --build .
+
+```
+
+## External Libraries
+
+For templates which require external libraries, the Conan Package Manager is
+used to download the libraries.
+
+```bash
+# Create a Project
+cppnew GUI_wxWidgets  myWxWidgetsProject
+
+cd myWxWidgetsProject
+mkdir build  && cd build
+conan install .. -s compiler.libcxx=libstdc++11 --build missing
 cmake ..
 cmake --build .
 
