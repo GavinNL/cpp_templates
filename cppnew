@@ -46,6 +46,7 @@ function update() {
 
     popd
 
+    cat $GIT_LOCAL_REPO/cppnew > $SOURCE
     exit 0
 }
 
@@ -106,8 +107,11 @@ else
 
         cp  -r ${TEMPLATE_LOCATION}/$1 ${DIR_NAME}
         rm  ${DIR_NAME}/DESCRIPTION
-
+        echo ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        echo Project Created: ${DIR_NAME}
+        echo ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         ( echo "cat <<EOF" ; cat ${DIR_NAME}/BUILD ; echo EOF ) | SRC_DIR=${DIR_NAME} sh
+        echo ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     fi
 
 fi
