@@ -1,0 +1,12 @@
+[requires]
+sqlitecpp/2.5.0
+
+[options]
+sqlite3:enable_json1=True
+sqlite3:shared=False
+
+[generators]
+cmake
+cmake_paths
+cmake_find_package
+
