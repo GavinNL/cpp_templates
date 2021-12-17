@@ -1,0 +1,14 @@
+[requires]
+sdl/2.0.16
+glbinding/3.1.0
+opengl/system
+
+[options]
+sdl:shared=False
+glbinding:shared=False
+
+[generators]
+cmake
+cmake_paths
+cmake_find_package
+
