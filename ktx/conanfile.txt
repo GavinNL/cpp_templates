@@ -1,0 +1,9 @@
+[requires]
+ktx/4.0.0
+
+[generators]
+cmake
+cmake_paths
+cmake_find_package
+cmake_find_package_multi
+virtualrunenv
