@@ -9,7 +9,7 @@ int main(int, char**)
     #define USE_MSG_PACK
 
     // If defined will use unix domain sockets, otherwise will use TCP
-    //#define USE_UNIX_DOMAIN
+    #define USE_UNIX_DOMAIN
 
     #define END_POINT_ADDRESS "mysocket"        // socket name to use for unix domains
     #define END_POINT_PORT 43845                // port to use for TCP
@@ -65,12 +65,28 @@ int main(int, char**)
         [&io](protocol::completion_handler complete, int a, int b)
         {
             // Call the completion handler later
-            packio::net::post(
-                io, [a, b, complete = std::move(complete)]() mutable {
+            packio::net::post(io, [a, b, complete = std::move(complete)]() mutable {
                     std::this_thread::sleep_for( std::chrono::seconds(4));
                     complete(a * b);
                 });
         });
+
+
+    server->dispatcher()->add_async(
+        "getVector", {"size"},
+        [&io](protocol::completion_handler complete, size_t size)
+        {
+            // Call the completion handler later
+            packio::net::post(io, [size, complete = std::move(complete)]() mutable {
+                    std::vector<int> xx;
+                    for(size_t i=0;i<size;i++)
+                    {
+                        xx.push_back(i);
+                    }
+                    complete(xx);
+                });
+        });
+
 
     // Accept connections
     server->async_serve_forever();
@@ -98,9 +114,9 @@ int main(int, char**)
     client->async_call(
         "add",
         #if defined USE_MSG_PACK
-        std::tuple{42, 24},
+            std::tuple{42, 24},
         #else
-        std::tuple{pio::arg("a") = 42, pio::arg("b") = 24},
+            std::tuple{pio::arg("a") = 42, pio::arg("b") = 24},
         #endif
         [&](pio::error_code, const protocol::rpc::response_type& r)
         {
@@ -116,30 +132,60 @@ int main(int, char**)
 
 
 
-    // Perform the RPC call in a background thread and get the future
-    // the future can be used to check the RPC function on the server has
-    // completed and a value returned
-    auto add_future = client->async_call( "multiply",
-                                          #if defined USE_MSG_PACK
-                                          std::tuple{12, 23},
-                                          #else
-                                          std::tuple{ pio::arg("a") = 12, pio::arg("b")= 23},
-                                          #endif
-                                          packio::net::use_future);
-
-    while( add_future.wait_for(std::chrono::seconds(0)) != std::future_status::ready)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        std::cout << "Waiting for RPC call to return" << std::endl;
+        // Perform the RPC call in a background thread and get the future
+        // the future can be used to check the RPC function on the server has
+        // completed and a value returned
+        auto add_future = client->async_call( "multiply",
+                                      #if defined USE_MSG_PACK
+                                              std::tuple{12, 23},
+                                      #else
+                                              std::tuple{ pio::arg("a") = 12, pio::arg("b")= 23},
+                                      #endif
+                                              packio::net::use_future);
+
+        while( add_future.wait_for(std::chrono::seconds(0)) != std::future_status::ready)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            std::cout << "Waiting for RPC call to return" << std::endl;
+        }
+        #if defined USE_MSG_PACK
+            std::cout << "12 * 23 = " << add_future.get().result.as<int>() << std::endl;
+        #else
+            std::cout << "12 * 23 = " << add_future.get().result.get<int>() << std::endl;
+        #endif
     }
-#if defined USE_MSG_PACK
-    std::cout << "12 * 23 = " << add_future.get().result.as<int>() << std::endl;
-#else
-    std::cout << "12 * 23 = " << add_future.get().result.get<int>() << std::endl;
-#endif
+
+    {
+        // Perform the RPC call in a background thread and get the future
+        // the future can be used to check the RPC function on the server has
+        // completed and a value returned
+        auto add_future = client->async_call( "getVector",
+                                      #if defined USE_MSG_PACK
+                                              std::tuple<size_t>{12},
+                                      #else
+                                              std::tuple{ pio::arg("size") = size_t(12},
+                                      #endif
+                                              packio::net::use_future);
+
+        while( add_future.wait_for(std::chrono::seconds(0)) != std::future_status::ready)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            std::cout << "Waiting for RPC call to return" << std::endl;
+        }
+        #if defined USE_MSG_PACK
+            auto v = add_future.get().result.as< std::vector<int > >();
+        #else
+            auto v = add_future.get().result.get< std::vector<int > >();
+        #endif
+            for(auto x : v )
+            {
+                std::cout << x << std::endl;
+            }
+    }
 
 
-    std::this_thread::sleep_for( std::chrono::seconds(10));
+    std::this_thread::sleep_for( std::chrono::seconds(20));
     io.stop();
     thread.join();
 

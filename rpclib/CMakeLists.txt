@@ -23,7 +23,7 @@ find_package(Threads)
 set(outName              server)   # name of the library
 set(srcFiles             "server.cpp"     )          # all the source files for this library
 set(PublicLinkedTargets  ""             )
-set(PrivateLinkedTargets  CONAN_PKG::spdlog CONAN_PKG::glm CONAN_PKG::nlohmann_json CONAN_PKG::catch2 CONAN_PKG::rpclib Threads::Threads)
+set(PrivateLinkedTargets  CONAN_PKG::rpclib Threads::Threads)
 
 #-------------------------------------------------------------------------------
 file(GLOB_RECURSE srcFiles ${srcFiles} )
@@ -57,7 +57,7 @@ target_link_libraries( ${outName}  PRIVATE ${PrivateLinkedTargets} )
 set(outName              client)   # name of the library
 set(srcFiles             "client.cpp"     )          # all the source files for this library
 set(PublicLinkedTargets  ""             )
-set(PrivateLinkedTargets  CONAN_PKG::spdlog CONAN_PKG::glm CONAN_PKG::nlohmann_json CONAN_PKG::catch2 CONAN_PKG::rpclib Threads::Threads)
+set(PrivateLinkedTargets  CONAN_PKG::rpclib Threads::Threads)
 
 #-------------------------------------------------------------------------------
 file(GLOB_RECURSE srcFiles ${srcFiles} )
