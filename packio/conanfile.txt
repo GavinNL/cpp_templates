@@ -6,7 +6,5 @@ packio/2.2.0
 packio:standalone_asio=True
 
 [generators]
-cmake
-cmake_paths
 cmake_find_package
 
