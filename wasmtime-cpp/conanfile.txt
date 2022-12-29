@@ -1,0 +1,10 @@
+[requires]
+spdlog/1.5.0
+wasmtime-cpp/3.0.0
+
+[options]
+#packio:standalone_asio=True
+
+[generators]
+cmake_find_package
+
