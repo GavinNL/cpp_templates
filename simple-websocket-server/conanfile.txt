@@ -1,0 +1,9 @@
+[requires]
+simple-websocket-server/2.0.2
+
+[options]
+
+
+[generators]
+cmake_find_package
+
