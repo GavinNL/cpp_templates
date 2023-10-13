@@ -1,0 +1,9 @@
+[requires]
+asio/1.28.1
+
+[options]
+
+
+[generators]
+cmake_find_package
+
